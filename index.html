@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math for Kids</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- BACKGROUND OPERATORS -->
+    <div class="bg-symbols" aria-hidden="true">
+        <span>+</span><span>−</span><span>×</span><span>÷</span>
+        <span>+</span><span>−</span><span>×</span><span>÷</span>
+        <span>+</span><span>−</span><span>×</span><span>÷</span>
+        <span>+</span><span>−</span><span>×</span><span>÷</span>
+        <span>+</span><span>−</span><span>×</span><span>÷</span>
+    </div>
+
+    <!-- HOME -->
+    <div class="screen" id="homeScreen">
+        <div class="mascot" id="homeMascot">🦊</div>
+        <h1>Math for Kids!</h1>
+        <p class="subtitle">Let's practice math and have fun! 🎉</p>
+        <button class="btn-start" onclick="showAvatar()">▶ Start Playing</button>
+    </div>
+
+    <!-- AVATAR SELECTION -->
+    <div class="screen hidden" id="avatarScreen">
+        <h2>Pick your character!</h2>
+        <div class="avatar-grid">
+            <div class="avatar-card" onclick="selectAvatar('🐱', 'Cat')" id="av-cat">
+                <span>🐱</span><p>Cat</p>
+            </div>
+            <div class="avatar-card" onclick="selectAvatar('🐶', 'Dog')" id="av-dog">
+                <span>🐶</span><p>Dog</p>
+            </div>
+            <div class="avatar-card" onclick="selectAvatar('🐼', 'Panda')" id="av-panda">
+                <span>🐼</span><p>Panda</p>
+            </div>
+            <div class="avatar-card" onclick="selectAvatar('🦊', 'Fox')" id="av-fox">
+                <span>🦊</span><p>Fox</p>
+            </div>
+        </div>
+        <button class="btn-back" onclick="goHome()">⬅ Back</button>
+    </div>
+
+    <!-- NAME ENTRY -->
+    <div class="screen hidden" id="nameScreen">
+        <div class="mascot" id="nameMascot">🦊</div>
+        <h2>What's your name?</h2>
+        <input type="text" id="nameInput" class="name-input" placeholder="Enter your name..." maxlength="16">
+        <p class="name-error hidden" id="nameError">⚠️ Please enter your name!</p>
+        <button class="btn-start" onclick="submitName()">Let's Go! 🚀</button>
+        <button class="btn-back" onclick="showAvatar()">⬅ Back</button>
+    </div>
+
+    <!-- DIFFICULTY -->
+    <div class="screen hidden" id="difficultyScreen">
+        <div class="mascot" id="diffMascot">🦊</div>
+        <h2>How hard?</h2>
+        <button class="btn-easy"   onclick="selectDifficulty('easy')">🌱 Easy &nbsp;(10 questions)</button>
+        <button class="btn-medium" onclick="selectDifficulty('medium')">🔥 Medium (15 questions)</button>
+        <button class="btn-hard"   onclick="selectDifficulty('hard')">💥 Hard &nbsp;(20 questions)</button>
+        <button class="btn-back"   onclick="showAvatar()">⬅ Back</button>
+    </div>
+
+    <!-- OPERATION -->
+    <div class="screen hidden" id="operationScreen">
+        <div class="mascot" id="opMascot">🦊</div>
+        <h2>Pick an operation!</h2>
+        <button class="btn-add" onclick="selectOperation('+')">➕ Addition</button>
+        <button class="btn-sub" onclick="selectOperation('-')">➖ Subtraction</button>
+        <button class="btn-mul" onclick="selectOperation('*')">✖️ Multiplication</button>
+        <button class="btn-div" onclick="selectOperation('/')">➗ Division</button>
+        <button class="btn-random" onclick="selectOperation('random')">🎲 Random</button>
+        <button class="btn-back" onclick="showDifficulty()">⬅ Back</button>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="screen hidden" id="quizScreen">
+
+        <div class="quiz-top">
+            <div class="quiz-avatar" id="quizAvatar">🦊</div>
+            <div class="quiz-name" id="quizName"></div>
+            <div class="quiz-stats">
+                <div class="lives" id="livesDisplay">❤️❤️❤️</div>
+                <div class="streak" id="streakDisplay">🔥 0</div>
+            </div>
+        </div>
+
+        <div class="progress-wrap">
+            <div class="progress-bar" id="progressBar" style="width:0%"></div>
+        </div>
+        <div class="progress-label" id="progressLabel">Question 1 / 10</div>
+
+        <div class="timer-wrap">
+            <div class="timer-bar" id="timerBar"></div>
+        </div>
+        <div class="timer-label" id="timerLabel">⏱ 30s</div>
+
+        <div class="score-row">
+            <span class="score-correct">✅ <span id="scoreCorrect">0</span></span>
+            <span class="score-wrong">❌ <span id="scoreWrong">0</span></span>
+            <span class="score-attempts">🎯 <span id="scoreAttempts">0</span></span>
+        </div>
+
+        <div class="problem-row">
+            <div class="math-box" id="box1">0</div>
+            <div class="operator" id="op">+</div>
+            <div class="math-box" id="box2">0</div>
+            <div class="operator">=</div>
+            <div class="math-box answer-box" id="boxAnswer" contenteditable="true" inputmode="numeric"></div>
+        </div>
+
+        <div class="action-row">
+            <button class="btn-new"   onclick="generateQuestion()">🔄 New</button>
+            <button class="btn-check" onclick="checkAnswer()" id="checkBtn">✅ Check!</button>
+        </div>
+
+        <div id="result"></div>
+
+        <div class="bottom-row">
+            <button class="btn-reset" onclick="resetGame()">🔁 Reset</button>
+            <button class="btn-back"  onclick="restartGame()">🏠 Menu</button>
+        </div>
+    </div>
+
+    <!-- CERTIFICATE -->
+    <div class="screen hidden" id="certificateScreen">
+        <div class="cert-trophy">🏆</div>
+        <h1 class="cert-title">Congratulations!</h1>
+        <div class="cert-avatar" id="certAvatar">🦊</div>
+        <p class="cert-sub">You are a</p>
+        <p class="cert-hero" id="certName">Math Hero!</p>
+        <div class="cert-stats" id="certStats"></div>
+        <button class="btn-start" onclick="resetGame()">▶ Play Again</button>
+        <button class="btn-back" onclick="restartGame()">🏠 Home</button>
+    </div>
+
+    <!-- GAME OVER -->
+    <div class="screen hidden" id="gameOverScreen">
+        <div class="mascot">😢</div>
+        <h2>Game Over!</h2>
+        <p class="subtitle">You ran out of lives!</p>
+        <div class="cert-stats" id="gameOverStats"></div>
+        <button class="btn-start" onclick="resetGame()">🔁 Try Again</button>
+        <button class="btn-back"  onclick="restartGame()">🏠 Main Menu</button>
+    </div>
+
+    <script src="math.js"></script>
+
+    <audio id="bgMusic" loop>
+        <source src="Fender Bender - Bad Snacks.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="celebrationSound">
+        <source src="Celebration Sound Effect.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="gameOverSound">
+        <source src="Game Over - Sound Effects  gamer sound effect.mp3" type="audio/mpeg">
+    </audio>
+</body>
+</html>
